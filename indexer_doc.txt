@@ -1,0 +1,32 @@
+https://{{search-service-name}}.search.windows.net/indexers/{{indexer-name}}?api-version=2023-11-01
+
+https://{{search-service-name}}.search.windows.net/indexers/{{indexer-name}}?api-version=2023-11-01
+{
+   "name": "document-search-indexer",
+    "description": null,
+    "dataSourceName": "test-rag-ds",
+    "skillsetName": "document-search-skillset",
+    "targetIndexName": "document-search-example",
+    "disabled": null,
+    "schedule": null,
+    "parameters": {
+      "batchSize": null,
+      "maxFailedItems": null,
+      "maxFailedItemsPerBatch": null,
+      "base64EncodeKeys": null,
+      "configuration": {
+        "dataToExtract": "contentAndMetadata",
+        "parsingMode": "default"
+      }
+    },
+    "fieldMappings": [
+      {
+        "sourceFieldName": "metadata_storage_name",
+        "targetFieldName": "title",
+        "mappingFunction": null
+      }
+    ],
+    "outputFieldMappings": [],
+    "cache": null,
+    "encryptionKey": null
+  }
