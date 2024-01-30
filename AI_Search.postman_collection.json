@@ -1,0 +1,143 @@
+{
+	"info": {
+		"_postman_id": "2b258154-ec1e-41b0-a6a2-fef98914fa8f",
+		"name": "AI_Search",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24085013"
+	},
+	"item": [
+		{
+			"name": "CreateDataSource",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "createIndex",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "createIndexer",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Check for collectionVariables\", function () {",
+					"    let vars = ['clientId', 'clientSecret', 'tenantId', 'subscriptionId'];",
+					"    vars.forEach(function (item, index, array) {",
+					"        console.log(item, index);",
+					"        pm.expect(pm.collectionVariables.get(item), item + \" variable not set\").to.not.be.undefined;",
+					"        pm.expect(pm.collectionVariables.get(item), item + \" variable not set\").to.not.be.empty; ",
+					"    });",
+					"",
+					"    if (!pm.collectionVariables.get(\"bearerToken\") || Date.now() > new Date(pm.collectionVariables.get(\"bearerTokenExpiresOn\") * 1000)) {",
+					"        pm.sendRequest({",
+					"            url: 'https://login.microsoftonline.com/' + pm.collectionVariables.get(\"tenantId\") + '/oauth2/token',",
+					"            method: 'POST',",
+					"            header: 'Content-Type: application/x-www-form-urlencoded',",
+					"            body: {",
+					"                mode: 'urlencoded',",
+					"                urlencoded: [",
+					"                    { key: \"grant_type\", value: \"client_credentials\", disabled: false },",
+					"                    { key: \"client_id\", value: pm.collectionVariables.get(\"clientId\"), disabled: false },",
+					"                    { key: \"client_secret\", value: pm.collectionVariables.get(\"clientSecret\"), disabled: false },",
+					"                    { key: \"resource\", value: pm.collectionVariables.get(\"resource\") || \"https://search.azure.com\", disabled: false }",
+					"                ]",
+					"            }",
+					"        }, function (err, res) {",
+					"            if (err) {",
+					"                console.log(err);",
+					"            } else {",
+					"                let resJson = res.json();",
+					"                pm.collectionVariables.set(\"bearerTokenExpiresOn\", resJson.expires_on);",
+					"                pm.collectionVariables.set(\"bearerToken\", resJson.access_token);",
+					"            }",
+					"        });",
+					"    }",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "clientId",
+			"value": "854f0dc7-d183-433e-980e-9184f9ecf8b2",
+			"type": "string"
+		},
+		{
+			"key": "clientSecret",
+			"value": "g2G8Q~Plca1Xrz0yFs8bJHPRpjAQpJM8FnLXeaxF",
+			"type": "string"
+		},
+		{
+			"key": "tenantId",
+			"value": "16b3c013-d300-468d-ac64-7eda0820b6d3",
+			"type": "string"
+		},
+		{
+			"key": "subscriptionId",
+			"value": "2f3efaad-7ffd-4f67-9efc-e5f6e0f73288",
+			"type": "string"
+		},
+		{
+			"key": "resource",
+			"value": "https://search.azure.com",
+			"type": "string"
+		},
+		{
+			"key": "bearerTokenExpiresOn",
+			"value": ""
+		},
+		{
+			"key": "search-service-name",
+			"value": "dataai-aisearch"
+		},
+		{
+			"key": "index-name",
+			"value": "document-search-example"
+		},
+		{
+			"key": "bearerToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "skillset-name",
+			"value": "document-search-skillset",
+			"type": "string"
+		},
+		{
+			"key": "indexer-name",
+			"value": "document-search-indexer"
+		},
+		{
+			"key": "datasource-name",
+			"value": "datasource-example"
+		}
+	]
+}
